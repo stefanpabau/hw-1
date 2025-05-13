@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stefan's ToDo</title>
+<style>
+
+</style>
+</head>
+<body>
+    <div id="container">
+        <h1>Stefan's ToDo App</h1>
+        <form id="todoForm">
+            <input type="text" class="todoInput" placeholder="Add a new task..." required />
+            <button type="submit">Add</button>
+        </form>
+        
+        </br>
+        <table>
+            <thead>
+                <tr>
+                <th>Task</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody id="tasks">
+            </tbody>
+        </table>
+    </div>
+
+<script>    
+    let map = new Map();
+    map.set("1", "Create js from scratch");
+    map.set("2", "Work 10h per day");
+    map.set("3", "Go home");
+
+    function addTodo (task) {
+        map.set(String(map.size + 1), task);
+        listItems();
+    }
+
+    function deleteTodo (id) {
+        map.delete(String(id));
+        listItems();
+    }
+
+    function performEdit (id) {
+        const input = document.querySelector(".editTaskInput");
+        const newValue = input.value.trim();
+
+        if (newValue) {
+            map.set(String(id), newValue);
+            listItems();
+        }
+    }
+
+    function editTodo(id) {
+        const row = document.getElementById(id);
+        const currentValue = map.get(String(id));
+
+        row.innerHTML = `
+            <td>
+                <input type="text" class="editTaskInput" value="${currentValue}" />
+            </td>
+            <td>
+                <button onclick="performEdit('${id}')">Save</button>
+            </td>
+        `;
+    }
+
+
+    function listItems() {
+        var result = '';
+
+        map.forEach((value, key) => {
+            result += `
+                <tr id="${key}">
+                    <td>${value}</td>
+                    <td>
+                        <button onClick="deleteTodo(${key})">Delete</button>
+                        <button onClick="editTodo(${key})">Edit</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("tasks").innerHTML = result;
+    }
+
+    document.getElementById("todoForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const input = document.querySelector(".todoInput");
+        if (input.value) {
+            addTodo(input.value);
+            input.value = '';
+        }
+    });
+
+    listItems();
+</script>
+</body>
+</html>
