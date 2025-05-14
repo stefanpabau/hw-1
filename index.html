@@ -151,29 +151,47 @@
                         `;
         }
 
-
         function listItems() {
-            var result = 'No tasks to do yet...';
+            const tasksTbody = document.getElementById("tasks");
+            tasksTbody.innerHTML = "";
 
-            if (map.size > 0) {
-                result = '';
-
-                console.log("Reload...");
-                map.forEach((value, key) => {
-                    console.log(key + " => " + value);
-                    result += `
-                            <tr id="${key}">
-                                <td>${value}</td>
-                                <td>
-                                    <button onClick="deleteTodo(${key})" id="delete">Delete</button>
-                                    <button onClick="editTodo(${key})" class="editBtn">Edit</button>
-                                </td>
-                            </tr>
-                        `;
-                });
+            if (map.size === 0) {
+                const tr = document.createElement("tr");
+                const td = document.createElement("td");
+                td.colSpan = 2;
+                td.textContent = "No tasks to do yet...";
+                tr.appendChild(td);
+                tasksTbody.appendChild(tr);
+                return;
             }
 
-            document.getElementById("tasks").innerHTML = result;
+            map.forEach((value, key) => {
+                const tr = document.createElement("tr");
+                tr.id = key;
+
+                const tdTask = document.createElement("td");
+                tdTask.textContent = value;
+
+                const tdActions = document.createElement("td");
+
+                const deleteBtn = document.createElement("button");
+                deleteBtn.id = "delete";
+                deleteBtn.textContent = "Delete";
+                deleteBtn.onclick = () => deleteTodo(key);
+
+                const editBtn = document.createElement("button");
+                editBtn.className = "editBtn";
+                editBtn.textContent = "Edit";
+                editBtn.onclick = () => editTodo(key);
+
+                tdActions.appendChild(deleteBtn);
+                tdActions.appendChild(editBtn);
+
+                tr.appendChild(tdTask);
+                tr.appendChild(tdActions);
+
+                tasksTbody.appendChild(tr);
+            });
         }
 
         document.getElementById("todoForm").addEventListener("submit", (event) => {
