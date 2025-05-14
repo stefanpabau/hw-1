@@ -110,12 +110,13 @@
 
     <script>
         let map = new Map();
+        let curentIndex = 4;
         map.set("1", "Create js from scratch");
         map.set("2", "Work 10h per day");
         map.set("3", "Go home");
 
         function addTodo(task) {
-            map.set(String(map.size + 1), task);
+            map.set(String(curentIndex++), task);
             listItems();
         }
 
@@ -155,7 +156,9 @@
             if (map.size > 0) {
                 result = '';
 
+                console.log("Reload...");
                 map.forEach((value, key) => {
+                    console.log(key + " => " + value);
                     result += `
                             <tr id="${key}">
                                 <td>${value}</td>
