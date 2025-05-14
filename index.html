@@ -138,17 +138,27 @@
         }
 
         function editTodo(id) {
+            listItems();
             const row = document.getElementById(id);
             const currentValue = map.get(String(id));
 
-            row.innerHTML = `
-                            <td>
-                                <input type="text" class="editTaskInput" value="${currentValue}" />
-                            </td>
-                            <td>
-                                <button onclick="performEdit('${id}')" class="editBtn">Save</button>
-                            </td>
-                        `;
+            row.innerHTML = "";
+
+            const tdInput = document.createElement("td");
+            const input = document.createElement("input");
+            input.type = "text";
+            input.className = "editTaskInput";
+            input.value = currentValue;
+            tdInput.appendChild(input);
+
+            const tdButton = document.createElement("td");
+            const button = document.createElement("button");
+            button.textContent = "Save";
+            button.className = "editBtn";
+            button.onclick = () => performEdit(id);
+            tdButton.appendChild(button);
+            row.appendChild(tdInput);
+            row.appendChild(tdButton);
         }
 
         function listItems() {
